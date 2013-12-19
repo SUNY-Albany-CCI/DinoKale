@@ -1,4 +1,4 @@
-Ext.define('DinoKale.view.SearchBar', {
+Ext.define('DinoKale.view.Map', {
     extend: 'Ext.Panel',
     xtype : 'map',
 
@@ -7,11 +7,14 @@ Ext.define('DinoKale.view.SearchBar', {
 
         items: [
             {
-                title: 'Welcome',
-                iconCls: 'add',
-
                 styleHtmlContent: true,
                 scrollable: true,
+
+                items: {
+                    docked: 'top',
+                    xtype: 'titlebar',
+                    title: 'Welcome to DinoKale'
+                },
 
                 html: [
                     "This will be the map panel"
