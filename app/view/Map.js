@@ -12,12 +12,8 @@ Ext.define('DinoKale.view.Map', {
         scrollable: true,
         styleHtmlContent: true,
 
-    
-        items: [
-            {
-               xtype: 'map'
-            }
-        ]
+        Ext.Viewport.add(Ext.create('Ext.Map'));
+
     }
 });
 
