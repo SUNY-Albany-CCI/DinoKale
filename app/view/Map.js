@@ -12,7 +12,7 @@ Ext.define('DinoKale.view.Map', {
         scrollable: true,
         styleHtmlContent: true,
 
-        Ext.Viewport.add(Ext.create('Ext.Map'));
+        xtype: 'map',
 
     }
 });
