@@ -11,7 +11,7 @@ Ext.define('DinoKale.view.Main', {
         items: [
             {
                 title: 'Welcome',
-                iconCls: 'home',
+                iconCls: 'add',
 
                 styleHtmlContent: true,
                 scrollable: true,
