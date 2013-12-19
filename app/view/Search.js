@@ -6,6 +6,9 @@ Ext.define('DinoKale.view.Search', {
         title:'Search',
         iconCls: 'search',
 
+        scrollable: true,
+        styleHtmlContent: true,
+
         html: [
                '<img src="http://staging.sencha.com/img/sencha.png" />',
                '<h1>Welcome to Sencha Touch</h1>',
