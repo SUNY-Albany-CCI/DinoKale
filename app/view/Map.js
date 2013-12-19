@@ -1,29 +1,19 @@
 Ext.define('DinoKale.view.Map', {
     extend: 'Ext.Panel',
-    xtype : 'map',
+    xtype: 'mappanel',
 
     config: {
-        layout: 'vbox',
+        title:'Map',
+        iconCls: 'map'
 
-        items: [
-            {
-                styleHtmlContent: true,
-                scrollable: true,
-
-                items: {
-                    docked: 'top',
-                    xtype: 'titlebar',
-                    title: 'Welcome to DinoKale'
-                },
-
-                html: [
-                    "This will be the map panel"
-                ].join("")
-
-            },
-        ]
+        html: [
+               '<img src="http://staging.sencha.com/img/sencha.png" />',
+               '<h1>Welcome to Sencha Touch</h1>',
+               "<p>This will eventually be a map page. ",
+               "for a simple app</p>",
+               '<h2>DinoKale (0.0.1)</h2>'
+               ].join("")
     }
-});
 });
 
 
