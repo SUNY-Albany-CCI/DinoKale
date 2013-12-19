@@ -4,7 +4,10 @@ Ext.define('DinoKale.view.Map', {
 
     config: {
         title:'Map',
-        iconCls: 'map',
+        iconCls: 'maps',
+
+        scrollable: true,
+        styleHtmlContent: true,
 
         html: [
                '<img src="http://staging.sencha.com/img/sencha.png" />',
