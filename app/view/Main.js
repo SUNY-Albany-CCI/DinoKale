@@ -12,6 +12,12 @@ Ext.define('DinoKale.view.Main', {
             {
                xtype: 'homepanel'
             }
+            {
+               xtype: 'mappanel'
+            }
+            {
+               xtype: 'searchpanel'
+            }
         ]
     }
 });
