@@ -47,8 +47,12 @@ Ext.define('DinoKale.view.Main', {
             },
             {
                 title: 'map',
-                iconCls: 'maps'
+                iconCls: 'maps',
                 xtype: 'map'
+            }, 
+            {
+                title: 'get data',
+                iconCls: 'search'
             } 
         ]
     }
