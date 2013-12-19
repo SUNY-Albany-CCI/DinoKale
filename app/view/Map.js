@@ -14,7 +14,7 @@
  *
  * @aside example maps
  */
-Ext.define('Ext.Map', {
+Ext.define('DinoKale.view.Map', {
     extend: 'Ext.Container',
     xtype : 'map',
     requires: ['Ext.util.Geolocation'],
