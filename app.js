@@ -64,7 +64,15 @@ Ext.application({
 
         //Tracking Marker Image
         var image = new google.maps.MarkerImage(
-            'resources/images/point.png',
+            'resources/images/pointRed.png',
+            new google.maps.Size(32, 31),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(16, 31)
+        );
+
+        //Tracking Marker Image
+        var image2 = new google.maps.MarkerImage(
+            'resources/images/pointBlue.png',
             new google.maps.Size(32, 31),
             new google.maps.Point(0, 0),
             new google.maps.Point(16, 31)
@@ -82,47 +90,52 @@ Ext.application({
         });
 
         var trafficButton = Ext.create('Ext.Button', {
-            pressed: false,
             iconCls: 'time'
         });
 
         var wicDataButton = Ext.create('Ext.Button', {
-            pressed: false,
             iconCls: 'search'
         });
 
         var communityIndicatorsButton = Ext.create('Ext.Button', {
-            pressed: false,
             iconCls: 'team'
         });
 
-		// utility to sort an array by an integer key
-		var sortByKey=function(array, key) {
-    		return array.sort(function(a, b) {
-        	var x = parseInt( a[key] ); var y = parseInt(b[key]);
-        	return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-    	});}
+        var restaurantLocationsButton = Ext.create('Ext.Button', {
+            iconCls: 'favorites'
+        });
 
-		var processCountyData= function(jsonstr)
-		{
-			sortByKey(jsonstr, "county_code");
+        var healthTipButton = Ext.create('Ext.Button', {
+            iconCls: 'info'
+        });
 
-			var simple=[];
+  // utility to sort an array by an integer key
+  var sortByKey=function(array, key) {
+  return array.sort(function(a, b) {
+  var x = parseInt( a[key] ); var y = parseInt(b[key]);
+  return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+  });}
 
-			for(var i = 0; i < jsonstr.length; i++) 
-			{
-				if( parseInt(jsonstr[i].county_code) <= 62) // delete index
-				{
-				//	simple.push(jsonstr);
-					simple.push({county_code: jsonstr[i].county_code, 
-						percentage_rate: jsonstr[i].percentage_rate, location: jsonstr[i].location});
-  				}
-			}
+  var processCountyData= function(jsonstr)
+  {
+    sortByKey(jsonstr, "county_code");
 
-			return simple;
-		};
+    var simple=[];
 
-		
+    for(var i = 0; i < jsonstr.length; i++) 
+    {
+      if( parseInt(jsonstr[i].county_code) <= 62) // delete index
+      {
+      //  simple.push(jsonstr);
+        simple.push({county_code: jsonstr[i].county_code, 
+          percentage_rate: jsonstr[i].percentage_rate, location: jsonstr[i].location});
+      }
+    }
+
+    return simple;
+  };
+
+    
         var getNYHealthData = function(resourceId, displayFunction, processFunction) {
 
           var xmlHttp = new XMLHttpRequest();
@@ -139,7 +152,7 @@ Ext.application({
                   result.data=processFunction(result.data);
                   }
 
-				if( displayFunction ) {
+                if( displayFunction ) {
                   displayFunction(result.data);
                   }
                 }
@@ -187,27 +200,30 @@ Ext.application({
                                 tracker.setTrackSuspended(!active);
                             }
                             else if (button == wicDataButton) {
-                              var resourceId = 'u98s-c3hg'; // WIC programs
+                              var resourceId = 'g4i5-r6zx'; // WIC programs
 
                               var renderLocations = function(datasetArray) {
 
-								console.log('downloaded data: ');
-								console.log(datasetArray);
+                console.log('downloaded data: ');
+                console.log(datasetArray);
 
                                 datasetArray.forEach( function(entry) {
-								  
+                  
 
                                   var coord = entry.location_1;
-                                  var position = new google.maps.LatLng(coord.latitude,coord.longitude);
 
-                                  var marker = new google.maps.Marker({
-                                     position: position,
-                                     title: entry.site_name,
-                                     shadow: shadow,
-                                     icon: image
-                                     });
+                                  if( coord.latitude && coord.longitude ) {
+					  var position = new google.maps.LatLng(coord.latitude,coord.longitude);
 
-                                  marker.setMap( mapdemo.getMap() );
+					  var marker = new google.maps.Marker({
+					     position: position,
+					     title: entry.site_name,
+					     shadow: shadow,
+					     icon: image
+					     });
+
+					  marker.setMap( mapdemo.getMap() );
+					}
 
                                   });
                                 };
@@ -221,20 +237,20 @@ Ext.application({
 
                                 var dataPoints = [];
 
-								console.log('length is: '+datasetArray.length);
+                                console.log('length is: '+datasetArray.length);
 
                                 datasetArray.forEach( function(entry) {
 
-								
-								  if (entry.county_code)
-									{
-										console.log('county code is'+entry.county_code);
-									}
+                
+                                  if (entry.county_code)
+                                  {
+                                  console.log('county code is'+entry.county_code);
+                                  }
+
                                   if( entry.location ) {
                                     var coord = entry.location;
 
                                     console.log('location is: '+coord);
-									
 
                                     if( coord.latitude && coord.longitude ) {
                                       var position = new google.maps.LatLng(coord.latitude,coord.longitude);
@@ -246,8 +262,6 @@ Ext.application({
 
                                 var pointArray = new google.maps.MVCArray(dataPoints);
 
-                                console.log(google.maps);
-
                                 var heatmap = new google.maps.visualization.HeatmapLayer({
                                     data: pointArray
                                   });
@@ -258,10 +272,51 @@ Ext.application({
 
                               getNYHealthData(resourceId,renderLocations, processCountyData);
                             }
+                            else if (button == restaurantLocationsButton) {
+                              var resourceId = 'qd6f-nmcs'; // Restaurant inspection data
+
+                              var renderLocations = function(datasetArray) {
+
+                                var dataPoints = [];
+
+                                datasetArray.forEach( function(entry) {
+
+                                  // The coordinates are in a "location1" field.
+                                  var coord = entry.location1;
+                                  var position = new google.maps.LatLng(coord.latitude,coord.longitude);
+
+                                  var marker = new google.maps.Marker({
+                                     position: position,
+                                     title: entry.site_name,
+                                     shadow: shadow,
+                                     icon: image2
+                                     });
+
+                                  marker.setMap( mapdemo.getMap() );
+
+                                  });
+
+                                };
+
+                              getNYHealthData(resourceId,renderLocations);
+                            }
+                            else if (button == healthTipButton) {
+                              var resourceId = 'bb49-98mq'; // Health Tips
+
+                              var displayHealthTip = function(tipsArray) {
+                                var tipMin = 0;
+                                var tipMax = tipsArray.length;
+                                var tipNumber = Math.floor(Math.random() * (tipMax - tipMin + 1)) + tipMin;
+                                var tipText = tipsArray[tipNumber].tip;
+                                alert(tipText);
+                                }
+
+                              getNYHealthData(resourceId,displayHealthTip);
+                            }
                         }
                     },
                     items: [
-                        trackingButton, trafficButton, wicDataButton, communityIndicatorsButton
+                        trackingButton, trafficButton, wicDataButton, communityIndicatorsButton, restaurantLocationsButton, healthTipButton
                     ]
                 }
             ]
