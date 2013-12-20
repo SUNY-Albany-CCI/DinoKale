@@ -82,8 +82,8 @@ Ext.application({
         });
 
         var trafficButton = Ext.create('Ext.Button', {
-            pressed: true,
-            iconCls: 'maps'
+            pressed: false,
+            iconCls: 'time'
         });
 
         var dataButton = Ext.create('Ext.Button', {
@@ -217,6 +217,8 @@ Ext.application({
 
             }
         });
+
+        mapdemo.getPlugins()[1].setHidden(1); // hide traffic initially
 
         // Initialize the main view
         // Ext.Viewport.add(Ext.create('DinoKale.view.Main'));
