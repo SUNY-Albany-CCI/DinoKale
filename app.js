@@ -86,9 +86,14 @@ Ext.application({
             iconCls: 'time'
         });
 
-        var dataButton = Ext.create('Ext.Button', {
+        var wicDataButton = Ext.create('Ext.Button', {
             pressed: false,
             iconCls: 'search'
+        });
+
+        var communityIndicatorsButton = Ext.create('Ext.Button', {
+            pressed: false,
+            iconCls: 'team'
         });
 
         var getNYHealthData = function(resourceId, processFunction) {
@@ -150,12 +155,12 @@ Ext.application({
                                 marker.setVisible(active);
                                 tracker.setTrackSuspended(!active);
                             }
-                            else if (button == dataButton) {
+                            else if (button == wicDataButton) {
                               var resourceId = 'g4i5-r6zx'; // WIC programs
 
-                              var renderLocations = function(wicData) {
+                              var renderLocations = function(datasetArray) {
 
-                                wicData.forEach( function(entry) {
+                                datasetArray.forEach( function(entry) {
 
                                   var coord = entry.location_1;
                                   var position = new google.maps.LatLng(coord.latitude,coord.longitude);
@@ -174,10 +179,46 @@ Ext.application({
 
                               getNYHealthData(resourceId,renderLocations);
                             }
+                            else if (button == communityIndicatorsButton) {
+                              var resourceId = 'tchg-ruva'; // Community Health indicators
+
+                              var renderLocations = function(datasetArray) {
+
+                                var dataPoints = [];
+
+                                datasetArray.forEach( function(entry) {
+
+                                  if( entry.location ) {
+                                    var coord = entry.location;
+
+                                    console.log(coord);
+
+                                    if( coord.latitude && coord.longitude ) {
+                                      var position = new google.maps.LatLng(coord.latitude,coord.longitude);
+                                      dataPoints.push(position);
+                                      }
+                                    }
+
+                                  });
+
+                                var pointArray = new google.maps.MVCArray(dataPoints);
+
+                                console.log(google.maps);
+
+                                var heatmap = new google.maps.visualization.HeatmapLayer({
+                                    data: pointArray
+                                  });
+
+                                  heatmap.setMap( mapdemo.getMap() );
+
+                                };
+
+                              getNYHealthData(resourceId,renderLocations);
+                            }
                         }
                     },
                     items: [
-                        trackingButton, trafficButton, dataButton
+                        trackingButton, trafficButton, wicDataButton, communityIndicatorsButton
                     ]
                 }
             ]
