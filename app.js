@@ -196,8 +196,6 @@ Ext.application({
                                   if( entry.location ) {
                                     var coord = entry.location;
 
-                                    console.log(coord);
-
                                     if( coord.latitude && coord.longitude ) {
                                       var position = new google.maps.LatLng(coord.latitude,coord.longitude);
                                       dataPoints.push(position);
@@ -207,8 +205,6 @@ Ext.application({
                                   });
 
                                 var pointArray = new google.maps.MVCArray(dataPoints);
-
-                                console.log(google.maps);
 
                                 var heatmap = new google.maps.visualization.HeatmapLayer({
                                     data: pointArray
