@@ -77,15 +77,19 @@ Ext.application({
             new google.maps.Point(-5, 42)
         );
 
-        trackingButton = Ext.create('Ext.Button', {
+        var trackingButton = Ext.create('Ext.Button', {
             iconCls: 'locate'
-        }),
+        });
 
-        trafficButton = Ext.create('Ext.Button', {
+        var trafficButton = Ext.create('Ext.Button', {
             pressed: true,
             iconCls: 'maps'
-        }),
+        });
 
+        var dataButton = Ext.create('Ext.Button', {
+            pressed: false,
+            iconCls: 'search'
+        });
 
         toolbar = Ext.create('Ext.Toolbar', {
             docked: 'top',
@@ -118,10 +122,35 @@ Ext.application({
                                 marker.setVisible(active);
                                 tracker.setTrackSuspended(!active);
                             }
+                            else if (button == dataButton) {
+
+                                var xmlHttp = new XMLHttpRequest();
+
+                                var clientSideUpdate = function() {
+
+                                    if (xmlHttp.readyState === 4) {
+                                      var result = {};
+                                      if (xmlHttp.status===200) {
+          //                              result.data = JSON.parse(xmlHttp.responseText);
+                                        }
+                                      result.status = xmlHttp.status;
+                                      alert(xmlHttp.responseText);
+                                      }
+
+                                  };
+
+                                var dataServerURL = 'http://54.225.78.7:8489';
+                                var resourceId = 'g4i5-r6zx'; // WIC programs
+                                var dataURI = dataServerURL+'?resource='+resourceId;
+
+                                xmlHttp.onreadystatechange = clientSideUpdate;
+                                xmlHttp.open( "GET", dataURI, false );
+                                xmlHttp.send( null );
+                            }
                         }
                     },
                     items: [
-                        trackingButton, trafficButton
+                        trackingButton, trafficButton, dataButton
                     ]
                 }
             ]
