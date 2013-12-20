@@ -91,6 +91,32 @@ Ext.application({
             iconCls: 'search'
         });
 
+        var getNYHealthData = function(resourceId) {
+
+          var xmlHttp = new XMLHttpRequest();
+
+          var clientSideUpdate = function() {
+
+              if (xmlHttp.readyState === 4) {
+                var result = {};
+                if (xmlHttp.status===200) {
+                  result.data = JSON.parse(xmlHttp.responseText);
+                  }
+                result.status = xmlHttp.status;
+                alert(xmlHttp.responseText);
+                }
+
+            };
+
+          var dataServerURL = 'http://54.225.78.7:8489';
+          var dataURI = dataServerURL+'?resource='+resourceId;
+
+          xmlHttp.onreadystatechange = clientSideUpdate;
+          xmlHttp.open( "GET", dataURI, false );
+          xmlHttp.send( null );
+
+          };
+
         toolbar = Ext.create('Ext.Toolbar', {
             docked: 'top',
             ui: 'light',
@@ -99,10 +125,10 @@ Ext.application({
                     iconCls: 'home',
                     handler: function() {
                         //disable tracking
-                        var segmented = Ext.getCmp('segmented'),
-                            pressedButtons = segmented.getPressedButtons(),
-                            trafficIndex = pressedButtons.indexOf(trafficButton),
-                            newPressed = (trafficIndex != -1) ? [trafficButton] : [];
+                        var segmented = Ext.getCmp('segmented');
+                        var pressedButtons = segmented.getPressedButtons();
+                        var trafficIndex = pressedButtons.indexOf(trafficButton);
+                        var newPressed = (trafficIndex != -1) ? [trafficButton] : [];
                         segmented.setPressedButtons(newPressed);
                         mapdemo.getMap().panTo(position);
                     }
@@ -117,35 +143,14 @@ Ext.application({
                                 mapdemo.getPlugins()[1].setHidden(!active);
                             }
                             else if (button == trackingButton) {
-                                var tracker = mapdemo.getPlugins()[0],
-                                    marker = tracker.getMarker();
+                                var tracker = mapdemo.getPlugins()[0];
+                                var marker = tracker.getMarker();
                                 marker.setVisible(active);
                                 tracker.setTrackSuspended(!active);
                             }
                             else if (button == dataButton) {
-
-                                var xmlHttp = new XMLHttpRequest();
-
-                                var clientSideUpdate = function() {
-
-                                    if (xmlHttp.readyState === 4) {
-                                      var result = {};
-                                      if (xmlHttp.status===200) {
-          //                              result.data = JSON.parse(xmlHttp.responseText);
-                                        }
-                                      result.status = xmlHttp.status;
-                                      alert(xmlHttp.responseText);
-                                      }
-
-                                  };
-
-                                var dataServerURL = 'http://54.225.78.7:8489';
-                                var resourceId = 'g4i5-r6zx'; // WIC programs
-                                var dataURI = dataServerURL+'?resource='+resourceId;
-
-                                xmlHttp.onreadystatechange = clientSideUpdate;
-                                xmlHttp.open( "GET", dataURI, false );
-                                xmlHttp.send( null );
+                              var resourceId = 'g4i5-r6zx'; // WIC programs
+                              getNYHealthData(resourceId);
                             }
                         }
                     },
