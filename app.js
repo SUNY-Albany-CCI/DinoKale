@@ -223,7 +223,9 @@ Ext.application({
                               var resourceId = 'bb49-98mq'; // Health Tips
 
                               var displayHealthTip = function(tipsArray) {
-                                var tipNumber = 5;
+                                var tipMin = 0;
+                                var tipMax = tipsArray.length;
+                                var tipNumber = Math.floor(Math.random() * (tipMax - tipMin + 1)) + tipMin;
                                 var tipText = tipsArray[tipNumber].tip;
                                 alert(tipText);
                                 }
