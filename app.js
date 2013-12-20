@@ -64,7 +64,15 @@ Ext.application({
 
         //Tracking Marker Image
         var image = new google.maps.MarkerImage(
-            'resources/images/point.png',
+            'resources/images/pointRed.png',
+            new google.maps.Size(32, 31),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(16, 31)
+        );
+
+        //Tracking Marker Image
+        var image2 = new google.maps.MarkerImage(
+            'resources/images/pointBlue.png',
             new google.maps.Size(32, 31),
             new google.maps.Point(0, 0),
             new google.maps.Point(16, 31)
@@ -233,7 +241,7 @@ Ext.application({
                                      position: position,
                                      title: entry.site_name,
                                      shadow: shadow,
-                                     icon: image
+                                     icon: image2
                                      });
 
                                   marker.setMap( mapdemo.getMap() );
