@@ -96,6 +96,10 @@ Ext.application({
             iconCls: 'team'
         });
 
+        var healthTipButton = Ext.create('Ext.Button', {
+            iconCls: 'info'
+        });
+
         var getNYHealthData = function(resourceId, processFunction) {
 
           var xmlHttp = new XMLHttpRequest();
@@ -215,10 +219,21 @@ Ext.application({
 
                               getNYHealthData(resourceId,renderLocations);
                             }
+                            else if (button == healthTipButton) {
+                              var resourceId = 'bb49-98mq'; // Health Tips
+
+                              var displayHealthTip = function(tipsArray) {
+                                var tipNumber = 5;
+                                var tipText = tipsArray[tipNumber].tip;
+                                alert(tipText);
+                                }
+
+                              getNYHealthData(resourceId,displayHealthTip);
+                            }
                         }
                     },
                     items: [
-                        trackingButton, trafficButton, wicDataButton, communityIndicatorsButton
+                        trackingButton, trafficButton, wicDataButton, communityIndicatorsButton, healthTipButton
                     ]
                 }
             ]
