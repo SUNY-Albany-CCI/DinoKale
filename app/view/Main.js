@@ -63,7 +63,29 @@ Ext.define('DinoKale.view.Main', {
                     id: 'databutton',
                     text: 'Get Data',
                     handler : function() {
-                      alert('tap');
+
+                      var xmlHttp = new XMLHttpRequest();
+
+                      var clientSideUpdate = function() {
+
+                          if (xmlHttp.readyState === 4) {
+                            var result = {};
+                            if (xmlHttp.status===200) {
+//                              result.data = JSON.parse(xmlHttp.responseText);
+                              }
+                            result.status = xmlHttp.status;
+                            alert(xmlHttp.responseText);
+                            }
+
+                        };
+
+                      var dataServerURL = 'http://54.225.78.7:8489';
+                      var resourceId = 'g4i5-r6zx'; // WIC programs
+                      var dataURI = dataServerURL+'?resource='+resourceId;
+
+                      xmlHttp.onreadystatechange = clientSideUpdate;
+                      xmlHttp.open( "GET", dataURI, false );
+                      xmlHttp.send( null );
                       }
                   }
                 ]
