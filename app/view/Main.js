@@ -44,6 +44,21 @@ Ext.define('DinoKale.view.Main', {
                         posterUrl: 'http://b.vimeocdn.com/ts/261/062/261062119_640.jpg'
                     }
                 ]
+            },
+            {
+                title: 'Get Data',
+                iconCls: 'search',
+
+                styleHtmlContent: true,
+                scrollable: true,
+
+                items: {
+                    docked: 'top',
+                    xtype: 'titlebar',
+                    title: 'Getting Data for NY Data'
+                },
+
+                html: "Getting Data"
             }
         ]
     }
