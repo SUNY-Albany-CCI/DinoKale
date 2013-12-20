@@ -1,3 +1,10 @@
+//<debug>
+Ext.Loader.setPath({
+    'Ext.plugin': 'lib/plugin'
+});
+//</debug>
+
+
 /*
     This file is generated and updated by Sencha Cmd. You can edit this file as
     needed for your application, but these edits will have to be merged by
@@ -14,7 +21,13 @@ Ext.application({
     name: 'DinoKale',
 
     requires: [
-        'Ext.MessageBox'
+        'Ext.MessageBox',
+        'Ext.Button',
+        'Ext.SegmentedButton',
+        'Ext.Panel',
+        'Ext.Toolbar',
+        'Ext.plugin.google.Traffic',
+        'Ext.plugin.google.Tracker'
     ],
 
     views: [
@@ -42,6 +55,28 @@ Ext.application({
     launch: function() {
         // Destroy the #appLoadingIndicator element
         Ext.fly('appLoadingIndicator').destroy();
+
+        var position = new google.maps.LatLng(37.44885, -122.158592);  //Sencha HQ
+
+        var infowindow = new google.maps.InfoWindow({
+            content: 'Sencha HQ'
+        });
+
+        //Tracking Marker Image
+        var image = new google.maps.MarkerImage(
+            'resources/images/point.png',
+            new google.maps.Size(32, 31),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(16, 31)
+        );
+
+        var shadow = new google.maps.MarkerImage(
+            'resources/images/shadow.png',
+            new google.maps.Size(64, 52),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(-5, 42)
+        );
+
 
         // Initialize the main view
         Ext.Viewport.add(Ext.create('DinoKale.view.Main'));
