@@ -82,17 +82,14 @@ Ext.application({
         });
 
         var trafficButton = Ext.create('Ext.Button', {
-            pressed: false,
             iconCls: 'time'
         });
 
         var wicDataButton = Ext.create('Ext.Button', {
-            pressed: false,
             iconCls: 'search'
         });
 
         var communityIndicatorsButton = Ext.create('Ext.Button', {
-            pressed: false,
             iconCls: 'team'
         });
 
