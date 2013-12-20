@@ -96,7 +96,34 @@ Ext.application({
             iconCls: 'team'
         });
 
-        var getNYHealthData = function(resourceId, processFunction) {
+		// utility to sort an array by an integer key
+		var sortByKey=function(array, key) {
+    		return array.sort(function(a, b) {
+        	var x = parseInt( a[key] ); var y = parseInt(b[key]);
+        	return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    	});}
+
+		var processCountyData= function(jsonstr)
+		{
+			sortByKey(jsonstr, "county_code");
+
+			var simple=[];
+
+			for(var i = 0; i < jsonstr.length; i++) 
+			{
+				if( parseInt(jsonstr[i].county_code) <= 62) // delete index
+				{
+				//	simple.push(jsonstr);
+					simple.push({county_code: jsonstr[i].county_code, 
+						percentage_rate: jsonstr[i].percentage_rate, location: jsonstr[i].location});
+  				}
+			}
+
+			return simple;
+		};
+
+		
+        var getNYHealthData = function(resourceId, displayFunction, processFunction) {
 
           var xmlHttp = new XMLHttpRequest();
 
@@ -109,7 +136,11 @@ Ext.application({
                   }
                 result.status = xmlHttp.status;
                 if( processFunction ) {
-                  processFunction(result.data);
+                  result.data=processFunction(result.data);
+                  }
+
+				if( displayFunction ) {
+                  displayFunction(result.data);
                   }
                 }
 
@@ -156,11 +187,15 @@ Ext.application({
                                 tracker.setTrackSuspended(!active);
                             }
                             else if (button == wicDataButton) {
-                              var resourceId = 'g4i5-r6zx'; // WIC programs
+                              var resourceId = 'u98s-c3hg'; // WIC programs
 
                               var renderLocations = function(datasetArray) {
 
+								console.log('downloaded data: ');
+								console.log(datasetArray);
+
                                 datasetArray.forEach( function(entry) {
+								  
 
                                   var coord = entry.location_1;
                                   var position = new google.maps.LatLng(coord.latitude,coord.longitude);
@@ -180,18 +215,26 @@ Ext.application({
                               getNYHealthData(resourceId,renderLocations);
                             }
                             else if (button == communityIndicatorsButton) {
-                              var resourceId = 'tchg-ruva'; // Community Health indicators
+                              var resourceId = 'u98s-c3hg';//'tchg-ruva'; // Community Health indicators
 
                               var renderLocations = function(datasetArray) {
 
                                 var dataPoints = [];
 
+								console.log('length is: '+datasetArray.length);
+
                                 datasetArray.forEach( function(entry) {
 
+								
+								  if (entry.county_code)
+									{
+										console.log('county code is'+entry.county_code);
+									}
                                   if( entry.location ) {
                                     var coord = entry.location;
 
-                                    console.log(coord);
+                                    console.log('location is: '+coord);
+									
 
                                     if( coord.latitude && coord.longitude ) {
                                       var position = new google.maps.LatLng(coord.latitude,coord.longitude);
@@ -213,7 +256,7 @@ Ext.application({
 
                                 };
 
-                              getNYHealthData(resourceId,renderLocations);
+                              getNYHealthData(resourceId,renderLocations, processCountyData);
                             }
                         }
                     },
