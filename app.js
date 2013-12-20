@@ -64,7 +64,15 @@ Ext.application({
 
         //Tracking Marker Image
         var image = new google.maps.MarkerImage(
-            'resources/images/point.png',
+            'resources/images/pointRed.png',
+            new google.maps.Size(32, 31),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(16, 31)
+        );
+
+        //Tracking Marker Image
+        var image2 = new google.maps.MarkerImage(
+            'resources/images/pointBlue.png',
             new google.maps.Size(32, 31),
             new google.maps.Point(0, 0),
             new google.maps.Point(16, 31)
@@ -82,18 +90,19 @@ Ext.application({
         });
 
         var trafficButton = Ext.create('Ext.Button', {
-            pressed: false,
             iconCls: 'time'
         });
 
         var wicDataButton = Ext.create('Ext.Button', {
-            pressed: false,
             iconCls: 'search'
         });
 
         var communityIndicatorsButton = Ext.create('Ext.Button', {
-            pressed: false,
             iconCls: 'team'
+        });
+
+        var restaurantLocationsButton = Ext.create('Ext.Button', {
+            iconCls: 'favorites'
         });
 
         var healthTipButton = Ext.create('Ext.Button', {
@@ -223,13 +232,39 @@ Ext.application({
 
                                 var pointArray = new google.maps.MVCArray(dataPoints);
 
-                                console.log(google.maps);
-
                                 var heatmap = new google.maps.visualization.HeatmapLayer({
                                     data: pointArray
                                   });
 
                                   heatmap.setMap( mapdemo.getMap() );
+
+                                };
+
+                              getNYHealthData(resourceId,renderLocations);
+                            }
+                            else if (button == restaurantLocationsButton) {
+                              var resourceId = 'qd6f-nmcs'; // Restaurant inspection data
+
+                              var renderLocations = function(datasetArray) {
+
+                                var dataPoints = [];
+
+                                datasetArray.forEach( function(entry) {
+
+                                  // The coordinates are in a "location1" field.
+                                  var coord = entry.location1;
+                                  var position = new google.maps.LatLng(coord.latitude,coord.longitude);
+
+                                  var marker = new google.maps.Marker({
+                                     position: position,
+                                     title: entry.site_name,
+                                     shadow: shadow,
+                                     icon: image2
+                                     });
+
+                                  marker.setMap( mapdemo.getMap() );
+
+                                  });
 
                                 };
 
@@ -251,7 +286,7 @@ Ext.application({
                         }
                     },
                     items: [
-                        trackingButton, trafficButton, wicDataButton, communityIndicatorsButton, healthTipButton
+                        trackingButton, trafficButton, wicDataButton, communityIndicatorsButton, restaurantLocationsButton, healthTipButton
                     ]
                 }
             ]
