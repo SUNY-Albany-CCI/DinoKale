@@ -52,13 +52,17 @@ Ext.define('DinoKale.view.Main', {
                 styleHtmlContent: true,
                 scrollable: true,
 
-                items: {
+                items: [
+                  {
                     docked: 'top',
                     xtype: 'titlebar',
                     title: 'Getting Data for NY Data'
-                },
-
-                html: "Getting Data"
+                  },
+                  {
+                    xtype: 'button',
+                    text: 'Get Data'
+                  }
+                ]
             }
         ]
     }
