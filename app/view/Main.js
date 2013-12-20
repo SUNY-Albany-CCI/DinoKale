@@ -60,7 +60,11 @@ Ext.define('DinoKale.view.Main', {
                   },
                   {
                     xtype: 'button',
-                    text: 'Get Data'
+                    id: 'databutton',
+                    text: 'Get Data',
+                    handler : function() {
+                      alert('tap');
+                      }
                   }
                 ]
             }
