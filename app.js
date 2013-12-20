@@ -190,16 +190,32 @@ Ext.application({
 
                                 var dataPoints = [];
 
+
                                 datasetArray.forEach( function(entry) {
 
                                   if( entry.location ) {
                                     var coord = entry.location;
+                                    var weight = entry.percentage_rate;
 
                                     console.log(coord);
+                                    console.log(weight);
 
                                     if( coord.latitude && coord.longitude ) {
                                       var position = new google.maps.LatLng(coord.latitude,coord.longitude);
                                       dataPoints.push(position);
+
+                                      var percentOptions = {
+                                        strokeColor: '#FF0000',
+                                        strokeOpacity: 0.8,
+                                        strokeWeight: 2,
+                                        fillColor: '#FF0000',
+                                        fillOpacity: 0.10,
+                                        map: mapdemo.getMap(),
+                                        center: position,
+                                        radius: weight * 10
+                                        };
+
+                                        cityCircle = new google.maps.Circle(percentOptions);
                                       }
                                     }
 
