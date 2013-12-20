@@ -56,10 +56,10 @@ Ext.application({
         // Destroy the #appLoadingIndicator element
         Ext.fly('appLoadingIndicator').destroy();
 
-        var position = new google.maps.LatLng(37.44885, -122.158592);  //Sencha HQ
+        var position = new google.maps.LatLng(42.6525, -73.7572);  //nearby Albany
 
         var infowindow = new google.maps.InfoWindow({
-            content: 'Sencha HQ'
+            content: 'Albany NY'
         });
 
         //Tracking Marker Image
@@ -164,7 +164,7 @@ Ext.application({
 
         var mapdemo = Ext.create('Ext.Map', {
             mapOptions : {
-                center : new google.maps.LatLng(37.381592, -122.135672),  //nearby San Fran
+                center : new google.maps.LatLng(42.6525, -73.7572),  //nearby Albany
                 zoom : 12,
                 mapTypeId : google.maps.MapTypeId.ROADMAP,
                 navigationControl: true,
@@ -202,7 +202,7 @@ Ext.application({
                 maprender: function(comp, map) {
                     var marker = new google.maps.Marker({
                         position: position,
-                        title : 'Sencha HQ',
+                        title : 'Albany NY',
                         map: map
                     });
 
