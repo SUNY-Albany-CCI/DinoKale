@@ -77,9 +77,121 @@ Ext.application({
             new google.maps.Point(-5, 42)
         );
 
+        trackingButton = Ext.create('Ext.Button', {
+            iconCls: 'locate'
+        }),
+
+        trafficButton = Ext.create('Ext.Button', {
+            pressed: true,
+            iconCls: 'maps'
+        }),
+
+
+        toolbar = Ext.create('Ext.Toolbar', {
+            docked: 'top',
+            ui: 'light',
+            items: [
+                {
+                    iconCls: 'home',
+                    handler: function() {
+                        //disable tracking
+                        var segmented = Ext.getCmp('segmented'),
+                            pressedButtons = segmented.getPressedButtons(),
+                            trafficIndex = pressedButtons.indexOf(trafficButton),
+                            newPressed = (trafficIndex != -1) ? [trafficButton] : [];
+                        segmented.setPressedButtons(newPressed);
+                        mapdemo.getMap().panTo(position);
+                    }
+                },
+                {
+                    id: 'segmented',
+                    xtype: 'segmentedbutton',
+                    allowMultiple: true,
+                    listeners: {
+                        toggle: function(buttons, button, active) {
+                            if (button == trafficButton) {
+                                mapdemo.getPlugins()[1].setHidden(!active);
+                            }
+                            else if (button == trackingButton) {
+                                var tracker = mapdemo.getPlugins()[0],
+                                    marker = tracker.getMarker();
+                                marker.setVisible(active);
+                                tracker.setTrackSuspended(!active);
+                            }
+                        }
+                    },
+                    items: [
+                        trackingButton, trafficButton
+                    ]
+                }
+            ]
+        });
+
+
+        var mapdemo = Ext.create('Ext.Map', {
+            mapOptions : {
+                center : new google.maps.LatLng(37.381592, -122.135672),  //nearby San Fran
+                zoom : 12,
+                mapTypeId : google.maps.MapTypeId.ROADMAP,
+                navigationControl: true,
+                navigationControlOptions: {
+                    style: google.maps.NavigationControlStyle.DEFAULT
+                }
+            },
+
+            plugins : [
+                new Ext.plugin.google.Tracker({
+                    trackSuspended: true,   //suspend tracking initially
+                    allowHighAccuracy: false,
+                    marker: new google.maps.Marker({
+                        position: position,
+                        title: 'My Current Location',
+                        shadow: shadow,
+                        icon: image
+                    })
+                }),
+                new Ext.plugin.google.Traffic()
+            ],
+            mapListeners: {
+                dragstart: function() {
+                    var segmented = Ext.getCmp('segmented'),
+                        pressedButtons = segmented.getPressedButtons().slice(),
+                        trackingIndex = pressedButtons.indexOf(trackingButton);
+                    if (trackingIndex != -1) {
+                        pressedButtons.splice(trackingIndex, 1);
+                        segmented.setPressedButtons(pressedButtons);
+                    }
+                }
+            },
+
+            listeners: {
+                maprender: function(comp, map) {
+                    var marker = new google.maps.Marker({
+                        position: position,
+                        title : 'Sencha HQ',
+                        map: map
+                    });
+
+                    google.maps.event.addListener(marker, 'click', function() {
+                        infowindow.open(map, marker);
+                    });
+
+                    setTimeout(function() {
+                        map.panTo(position);
+                    }, 1000);
+                }
+
+            }
+        });
 
         // Initialize the main view
-        Ext.Viewport.add(Ext.create('DinoKale.view.Main'));
+        // Ext.Viewport.add(Ext.create('DinoKale.view.Main'));
+
+        Ext.create('Ext.Panel', {
+            fullscreen: true,
+            layout: 'fit',
+            items: [toolbar, mapdemo]
+        });
     },
 
     onUpdated: function() {
