@@ -91,7 +91,7 @@ Ext.application({
             iconCls: 'search'
         });
 
-        var getNYHealthData = function(resourceId) {
+        var getNYHealthData = function(resourceId, processFunction) {
 
           var xmlHttp = new XMLHttpRequest();
 
@@ -103,7 +103,9 @@ Ext.application({
                   result.data = JSON.parse(xmlHttp.responseText);
                   }
                 result.status = xmlHttp.status;
-                alert(xmlHttp.responseText);
+                if( processFunction ) {
+                  processFunction(result.data);
+                  }
                 }
 
             };
@@ -150,7 +152,27 @@ Ext.application({
                             }
                             else if (button == dataButton) {
                               var resourceId = 'g4i5-r6zx'; // WIC programs
-                              getNYHealthData(resourceId);
+
+                              var renderLocations = function(wicData) {
+
+                                wicData.forEach( function(entry) {
+
+                                  var coord = entry.location_1;
+                                  var position = new google.maps.LatLng(coord.latitude,coord.longitude);
+
+                                  var marker = new google.maps.Marker({
+                                     position: position,
+                                     title: entry.site_name,
+                                     shadow: shadow,
+                                     icon: image
+                                     });
+
+                                  marker.setMap( mapdemo.getMap() );
+
+                                  });
+                                };
+
+                              getNYHealthData(resourceId,renderLocations);
                             }
                         }
                     },
